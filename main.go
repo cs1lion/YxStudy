@@ -11,6 +11,7 @@ func main() {
       fmt.Println("You head further up the mountain")
       case "enter cave","go inside":
       fmt.Println("You find yourself in a dimly lit cavern")
+      fallthrough
       case "read sign":
       fmt.Println("The sign reads 'No Minors'")
       default:
