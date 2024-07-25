@@ -9,5 +9,6 @@ func main() {
 
 	var age = 41
 	var minor = age < 18
+	
 	fmt.Println("At age %v,am I a minor? %v\n", age, minor)
 }
