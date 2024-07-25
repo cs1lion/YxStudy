@@ -1,14 +1,16 @@
 package main
 
-import(
+import (
 	"fmt"
-	"strings"
 )
 
-
 func main() {
-	fmt.Println("You find yourself in a dimlt lit cavern.")
-	var command = "walk outside"
-	var exit = strings.Contains(command,"outside")
-	fmt.Println("You leave the cave",exit)
+	var command = "go test"
+	if command == "go test"{
+		fmt.Println("You head further up the mountain")
+	}else if command =="go inside"{
+		fmt.Println("You enter the cave where you live out the rest of your life")
+	}else{
+		fmt.Println("Didn't quite get that")
+	}
 }
