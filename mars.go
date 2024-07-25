@@ -1,13 +1,14 @@
 package main
 
-import "fmt"
-import "math/rand"
+import(
+	"fmt"
+	"strings"
+)
+
 
 func main() {
-	var num = rand.Intn(10) + 1
-	fmt.Println(num)
-	num = rand.Intn(19) + 1
-	fmt.Println(num)
-    //homework
-    fmt.Printf("Malacandra's speed is %v\n",56000000/(28*24))
+	fmt.Println("You find yourself in a dimlt lit cavern.")
+	var command = "walk outside"
+	var exit = strings.Contains(command,"outside")
+	fmt.Println("You leave the cave",exit)
 }
