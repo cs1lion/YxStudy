@@ -1,6 +1,9 @@
 package main
 import "fmt"
 func main(){
-    fmt.Printf("%-15v $%4v\n", "SpaceX", 94)
-    fmt.Printf("%-15v $%4v\n", "Virgin Galactic", 100)
+    const lightSpeed = 299792 // km/s
+    var distance = 56000000 // km
+    fmt.Println(distance/lightSpeed, "seconds")
+    distance = 401000000
+    fmt.Println(distance/lightSpeed, "seconds")
 }
