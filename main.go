@@ -26,4 +26,9 @@ func main() {
 	days.Div(seconds, secondsPerDay)
 
 	fmt.Println("That is", days, "days of travel at light speed")
+
+	message:="kalerfg"
+	for count:=7; count>0; count--{
+		fmt.Printf("%T\n",message[count-1])
+	}
 }
