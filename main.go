@@ -1,18 +1,22 @@
 package main
 
 import "fmt"
-import "math"
-import "strconv"
+//import "math"
+//import "strconv"
 func main(){
-	v:=42
-	if v>=0&&v<=math.MaxUint8{
-
-	
-	v8:=uint8(v)
-	fmt.Println("converted:",v8)
-	}
-
-	intnum:=25649
-	fmt.Print("con:",string(intnum))
-	fmt.Print("con:",strconv.Itoa(intnum))
+    ciperText:= "CSOITEUIWUIZNSROCNKFD"
+    keyword:="GOLANG"
+    message:=""
+    keyIndex:=0
+    for i:=0;i<len(ciperText);i++{
+        //A=0,B=1....Z=25
+        c:=ciperText[i]-'A'
+        k:=keyword[keyIndex]-'A'
+        //加密字母-关键字(密码)字母
+        c = (c-k+26)%26+'A'
+        message+=string(c)
+        keyIndex++
+        keyIndex%=len(keyword)
+    }
+    fmt.Println(message)
 }
