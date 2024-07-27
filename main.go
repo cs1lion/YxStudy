@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 //import "time"
-import "math/big"
 
 // const(
 // 	Virgin Galactic = iota +1
@@ -12,23 +11,17 @@ import "math/big"
 // )
 
 func main() {
-	LightSpeed := big.NewInt(299792)
-	secondsPerDay := big.NewInt(86400)
+	message:="Lfdph,L vdz,L frqtxhuhg"
+	for _,c:=range message{
+		fmt.Printf("%c",c-3)
 
-	distance := new(big.Int)
-	distance.SetString("24000000000000000000", 10)
-	fmt.Println("Andromeda Galaxy is", distance, "km away")
+		if c>='a'&&c<='z'{
+			c+=13
+			if c>'z'{
+				c-=26
+			}
 
-	seconds := new(big.Int)
-	seconds.Div(distance, LightSpeed)
-
-	days := new(big.Int)
-	days.Div(seconds, secondsPerDay)
-
-	fmt.Println("That is", days, "days of travel at light speed")
-
-	message:="kalerfg"
-	for count:=7; count>0; count--{
-		fmt.Printf("%T\n",message[count-1])
+			//print
+		}
 	}
 }
