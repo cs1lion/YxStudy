@@ -17,7 +17,7 @@ func fakesensor() kelvin{
 
 func calibrate(s sensor, offset kelvin) sensor{
     return func() kelvin{
-        //offset+=100
+        offset+=100
         return s()+offset
     }
 }
