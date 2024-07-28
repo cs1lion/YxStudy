@@ -1,33 +1,57 @@
 package main
 
 import "fmt"
-import "math/rand"
 
-type kelvin float64
+type celsius float64
 
-type sensor func() kelvin
-
-func realsensor() kelvin{
-    return 0
+func (c celsius) fahrenhelt() fahrenhelt {
+	return fahrenhelt((c * 9.0 / 5.0) + 32.0)
 }
 
-func fakesensor() kelvin{
-    return kelvin(rand.Intn(50)+50)
+type fahrenhelt float64
+
+func (f fahrenhelt) celsius() celsius {
+	return celsius((f - 32.0) * 5.0 / 9.0)
 }
 
-func calibrate(s sensor, offset kelvin) sensor{
-    return func() kelvin{
-        offset+=100
-        return s()+offset
-    }
+const (
+	line         = "======================="
+	rowFormat    = "| %8s | %8s |\n"
+	numberFormat = "%.1f"
+)
+
+type getRowFn func(row int) (string, string)
+
+// drawTable函数画出两列的表格
+func drawTable(hdr1, hdr2 string, rows int, getRow getRowFn) {
+	fmt.Println(line)
+	fmt.Printf(rowFormat, hdr1, hdr2)
+	fmt.Println(line)
+	for row := 0; row < rows; row++ {
+		cell1, cell2 := getRow(row)
+		fmt.Printf(rowFormat, cell1, cell2)
+	}
+	fmt.Println(line)
+}
+
+func ctof(row int) (string, string) {
+	c := celsius(row*5 - 40)
+	f := c.fahrenhelt()
+	cell1 := fmt.Sprintf(numberFormat, c)
+	cell2 := fmt.Sprintf(numberFormat, f)
+	return cell1, cell2
+}
+
+func ftoc(row int) (string, string) {
+	f := fahrenhelt(row*5 - 40)
+	c := f.celsius()
+	cell1 := fmt.Sprintf(numberFormat, f)
+	cell2 := fmt.Sprintf(numberFormat, c)
+	return cell1, cell2
 }
 
 func main() {
-    var offset kelvin = 5
-    sensor:=calibrate(fakesensor,offset)
-
-    for count:=0;count<10;count++{
-        fmt.Println(sensor())
-        //offset+=100
-    }
+	drawTable(".C", ".F", 29, ctof)
+	fmt.Println()
+	drawTable(".F", ".C", 29, ftoc)
 }
