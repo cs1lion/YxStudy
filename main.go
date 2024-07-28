@@ -1,37 +1,33 @@
 package main
 
 import "fmt"
-
-type celsius float64
-
-func(c celsius) fahrenhelt() fahrenhelt{
-    return fahrenhelt((c*9.0/5.0)+32.0)
-}
-func(c celsius) kelvin() kelvin{
-    return kelvin(c+273.15)
-}
-
-type fahrenhelt float64
-
-func (f fahrenhelt) celsius() celsius{
-    return celsius((f-32.0)*5.0/9.0)
-}
-
-func(f fahrenhelt) kelvin() kelvin{
-    return f.celsius().kelvin()
-}
+import "math/rand"
 
 type kelvin float64
 
-func(k kelvin) celsius() celsius{
-    return celsius(k-273.15)
+type sensor func() kelvin
+
+func realsensor() kelvin{
+    return 0
 }
 
-func(k kelvin) fahrenhelt() fahrenhelt{
-    return k.celsius().fahrenhelt()
+func fakesensor() kelvin{
+    return kelvin(rand.Intn(50)+50)
 }
 
-func main(){
-    var f fahrenhelt = 255.2
-    fmt.Println("f:",f,"f to c:",f.celsius())
+func calibrate(s sensor, offset kelvin) sensor{
+    return func() kelvin{
+        //offset+=100
+        return s()+offset
+    }
+}
+
+func main() {
+    var offset kelvin = 5
+    sensor:=calibrate(fakesensor,offset)
+
+    for count:=0;count<10;count++{
+        fmt.Println(sensor())
+        //offset+=100
+    }
 }
