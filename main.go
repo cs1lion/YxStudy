@@ -2,56 +2,40 @@ package main
 
 import "fmt"
 
-type celsius float64
-
-func (c celsius) fahrenhelt() fahrenhelt {
-	return fahrenhelt((c * 9.0 / 5.0) + 32.0)
+func display(board [8][8]rune){
+    for _,row:=range board{
+        for _,column:=range row{
+            if column==0{
+                fmt.Print(" ")
+            }else{
+                fmt.Printf("%c",column)
+            }
+        }
+        fmt.Println()
+    }
 }
 
-type fahrenhelt float64
-
-func (f fahrenhelt) celsius() celsius {
-	return celsius((f - 32.0) * 5.0 / 9.0)
-}
-
-const (
-	line         = "======================="
-	rowFormat    = "| %8s | %8s |\n"
-	numberFormat = "%.1f"
-)
-
-type getRowFn func(row int) (string, string)
-
-// drawTable函数画出两列的表格
-func drawTable(hdr1, hdr2 string, rows int, getRow getRowFn) {
-	fmt.Println(line)
-	fmt.Printf(rowFormat, hdr1, hdr2)
-	fmt.Println(line)
-	for row := 0; row < rows; row++ {
-		cell1, cell2 := getRow(row)
-		fmt.Printf(rowFormat, cell1, cell2)
-	}
-	fmt.Println(line)
-}
-
-func ctof(row int) (string, string) {
-	c := celsius(row*5 - 40)
-	f := c.fahrenhelt()
-	cell1 := fmt.Sprintf(numberFormat, c)
-	cell2 := fmt.Sprintf(numberFormat, f)
-	return cell1, cell2
-}
-
-func ftoc(row int) (string, string) {
-	f := fahrenhelt(row*5 - 40)
-	c := f.celsius()
-	cell1 := fmt.Sprintf(numberFormat, f)
-	cell2 := fmt.Sprintf(numberFormat, c)
-	return cell1, cell2
-}
-
-func main() {
-	drawTable(".C", ".F", 29, ctof)
-	fmt.Println()
-	drawTable(".F", ".C", 29, ftoc)
+func main(){
+    var board [8][8]rune
+    board[0][0]='r'
+    board[0][1]='n'
+    board[0][2]='b'
+    board[0][3]='q'
+    board[0][4]='k'
+    board[0][5]='b'
+    board[0][6]='n'
+    board[0][7]='r'
+    for column:=range board[1]{
+        board[1][column]='P'
+        board[6][column]='p'
+    }
+    board[7][0]='R'
+    board[7][1]='N'
+    board[7][2]='B'
+    board[7][3]='Q'
+    board[7][4]='K'
+    board[7][5]='B'
+    board[7][6]='N'
+    board[7][7]='R'
+    display(board)
 }
