@@ -1,24 +1,116 @@
 package main
 
 import "fmt"
-import "strings"
+import "math/rand"
+import "math"
+import "time"
 
-func countwords(text string)map[string]int{
-    words:=strings.Fields(strings.ToLower(text))
-    frequency:=make(map[string]int,len(words))
-    for _,word:=range words{
-        word = strings.Trim(word,`.,"-;`)
-        frequency[word]++
-    }
-    return frequency
+const (
+	height = 15
+	width  = 80
+)
+
+type Universe [][]bool
+
+func NewUniverse() Universe {
+	Universe := make([][]bool,height)
+	//EinU := make([]bool, width)
+	for i := range Universe{      
+		Universe[i] = make([]bool,width)
+	}
+	return Universe
 }
 
-func main(){
-    text:=`It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going the other way – in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.`
-    frequency:=countwords(text)
-    for word,count:=range frequency{
-        if count>1{
-            fmt.Printf("%d %v\n",count,word)
-        }
-    }
+func (u Universe) show() {
+	//fmt.Println("-------")
+	for _, row := range u {
+		for _, column := range row {
+			if column {
+				fmt.Print("*")
+			} else {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println()
+	}
+}
+
+// 随机激活25%的细胞
+func (u Universe) Seed() {
+	num := int(math.Round(height * width * 0.25))
+	for count := 0; count < num; {
+		wrand := rand.Intn(width)
+		hrand := rand.Intn(height)
+		if u[hrand][wrand] {
+			continue
+		}
+		u[hrand][wrand] = true
+		count++
+	}
+}
+
+func(u Universe) Alive(x,y int)bool{
+    for x<0{
+		x+=width
+	}
+	for y<0{
+		y+=height
+	}
+	x = x%width
+	y = y%height
+	return u[y][x]
+}
+
+func (u Universe) Neighbors(x,y int)int{
+	num:=0
+	xslice:=[]int{x-1,x,x+1,x-1,x+1,x-1,x,x+1}
+	yslice:=[]int{y-1,y-1,y-1,y,y,y+1,y+1,y+1}
+	for i:=0;i<8;i++{
+		if u.Alive(xslice[i],yslice[i]){
+		num+=1
+		}
+	}
+	return num
+}
+
+func(u Universe) Next(x,y int)bool{
+	if u.Alive(x,y)&&u.Neighbors(x,y)<2{
+		return false
+	}else if u.Alive(x,y)&&(u.Neighbors(x,y)==2||u.Neighbors(x,y)==3){
+		return u[y][x]
+	}else if u.Alive(x,y)&&u.Neighbors(x,y)>3{
+		return false
+	}else if !u.Alive(x,y)&&u.Neighbors(x,y)==3{
+		return true
+	}
+	return u.Alive(x,y)
+}
+
+func Step(a,b Universe){
+	for x:=0;x<width;x++{
+		for y:=0;y<height;y++{
+			b[y][x]=a.Next(x,y)
+		}
+	}
+}
+
+func main() {
+	u := NewUniverse()
+    u.Seed()
+	//u.Seed()
+	//u.Seed()
+	//u.Seed()
+	//u.show()
+	//fmt.Println(u.Alive(0,-1))
+    //fmt.Println(u.Neighbors(33,655))
+	//fmt.Println(u.Next(1,1))
+	tempu:=NewUniverse()
+	for{
+		time.Sleep(time.Second)
+		u.show()
+		Step(u,tempu)
+		u,tempu = tempu,u
+		time.Sleep(time.Second)
+		fmt.Print("\x0c")
+	}
 }
