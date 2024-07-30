@@ -1,17 +1,14 @@
 package main
 
 import "fmt"
-type Planets []string
-
-func (p Planets)terraform() {
-    for i,v:=range p{
-        p[i]=fmt.Sprintf("New %v",v)
-    }
-}
-
 func main(){
-    planets:=[]string{"a","b","Mars","c","Uranus","Neptune"}
-    Planets(planets[2:3]).terraform()
-    Planets(planets[4:]).terraform()
-    fmt.Print(planets)
+    s:=[]string{}
+    lastCap:=cap(s)
+    for i:=0;i<10000;i++{
+        s = append(s,"An element")
+        if cap(s)!=lastCap{
+            fmt.Println(cap(s))
+        }
+        lastCap=cap(s)
+    }
 }
