@@ -13,10 +13,10 @@ const (
 type Universe [][]bool
 
 func NewUniverse() Universe {
-	Universe := make([][]bool,height)
+	Universe := make([][]bool, height)
 	//EinU := make([]bool, width)
-	for i := range Universe{      
-		Universe[i] = make([]bool,width)
+	for i := range Universe {
+		Universe[i] = make([]bool, width)
 	}
 	return Universe
 }
@@ -49,68 +49,68 @@ func (u Universe) Seed() {
 	}
 }
 
-func(u Universe) Alive(x,y int)bool{
-    for x<0{
-		x+=width
+func (u Universe) Alive(x, y int) bool {
+	for x < 0 {
+		x += width
 	}
-	for y<0{
-		y+=height
+	for y < 0 {
+		y += height
 	}
-	x = x%width
-	y = y%height
+	x = x % width
+	y = y % height
 	return u[y][x]
 }
 
-func (u Universe) Neighbors(x,y int)int{
-	num:=0
-	xslice:=[]int{x-1,x,x+1,x-1,x+1,x-1,x,x+1}
-	yslice:=[]int{y-1,y-1,y-1,y,y,y+1,y+1,y+1}
-	for i:=0;i<8;i++{
-		if u.Alive(xslice[i],yslice[i]){
-		num+=1
+func (u Universe) Neighbors(x, y int) int {
+	num := 0
+	xslice := []int{x - 1, x, x + 1, x - 1, x + 1, x - 1, x, x + 1}
+	yslice := []int{y - 1, y - 1, y - 1, y, y, y + 1, y + 1, y + 1}
+	for i := 0; i < 8; i++ {
+		if u.Alive(xslice[i], yslice[i]) {
+			num += 1
 		}
 	}
 	return num
 }
 
-func(u Universe) Next(x,y int)bool{
-	if u.Alive(x,y)&&u.Neighbors(x,y)<2{
+func (u Universe) Next(x, y int) bool {
+	if u.Alive(x, y) && u.Neighbors(x, y) < 2 {
 		return false
-	}else if u.Alive(x,y)&&(u.Neighbors(x,y)==2||u.Neighbors(x,y)==3){
+	} else if u.Alive(x, y) && (u.Neighbors(x, y) == 2 || u.Neighbors(x, y) == 3) {
 		return u[y][x]
-	}else if u.Alive(x,y)&&u.Neighbors(x,y)>3{
+	} else if u.Alive(x, y) && u.Neighbors(x, y) > 3 {
 		return false
-	}else if !u.Alive(x,y)&&u.Neighbors(x,y)==3{
+	} else if !u.Alive(x, y) && u.Neighbors(x, y) == 3 {
 		return true
 	}
-	return u.Alive(x,y)
+	return u.Alive(x, y)
 }
 
-func Step(a,b Universe){
-	for x:=0;x<width;x++{
-		for y:=0;y<height;y++{
-			b[y][x]=a.Next(x,y)
+func Step(a, b Universe) {
+	for x := 0; x < width; x++ {
+		for y := 0; y < height; y++ {
+			b[y][x] = a.Next(x, y)
 		}
 	}
 }
 
 func main() {
 	u := NewUniverse()
-    u.Seed()
+	u.Seed()
 	//u.Seed()
 	//u.Seed()
 	//u.Seed()
 	//u.show()
 	//fmt.Println(u.Alive(0,-1))
-    //fmt.Println(u.Neighbors(33,655))
+	//fmt.Println(u.Neighbors(33,655))
 	//fmt.Println(u.Next(1,1))
-	tempu:=NewUniverse()
-	for{
+	tempu := NewUniverse()
+	for {
 		time.Sleep(time.Second)
 		u.show()
-		Step(u,tempu)
-		u,tempu = tempu,u
+		Step(u, tempu)
+		u, tempu = tempu, u
 		time.Sleep(time.Second)
-		fmt.Print("\x0c")
+		fmt.Print("\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c")
 	}
 }
