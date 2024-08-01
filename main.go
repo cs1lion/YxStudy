@@ -21,18 +21,24 @@ func NewUniverse() Universe {
 	return Universe
 }
 
-func (u Universe) show() {
-	//fmt.Println("-------")
+func (u Universe) String() string {
+	var b byte
+	buf:=make([]byte,0,(width+1)*height)
 	for _, row := range u {
 		for _, column := range row {
+			b=' '
 			if column {
-				fmt.Print("*")
-			} else {
-				fmt.Print(" ")
+				b='*'
 			}
+			buf=append(buf,b)
 		}
-		fmt.Println()
+		buf=append(buf,'\n')
 	}
+	return string(buf)
+}
+
+func(u Universe) show(){
+	fmt.Printf("\x0c%v",u.String())
 }
 
 // 随机激活25%的细胞
@@ -110,7 +116,5 @@ func main() {
 		u.show()
 		Step(u, tempu)
 		u, tempu = tempu, u
-		time.Sleep(time.Second)
-		fmt.Print("\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c\x0c")
 	}
 }
