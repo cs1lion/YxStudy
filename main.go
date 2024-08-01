@@ -38,7 +38,7 @@ func (u Universe) String() string {
 }
 
 func(u Universe) show(){
-	fmt.Printf("\x0c%v",u.String())
+	fmt.Printf("\x0c%s",u.String())
 }
 
 // 随机激活25%的细胞
