@@ -111,7 +111,7 @@ func main() {
 	//fmt.Println(u.Neighbors(33,655))
 	//fmt.Println(u.Next(1,1))
 	tempu := NewUniverse()
-	for {
+	for i:=0;i<30;i++{
 		time.Sleep(time.Second)
 		u.show()
 		Step(u, tempu)
