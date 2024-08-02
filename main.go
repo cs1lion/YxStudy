@@ -3,68 +3,108 @@ package main
 
 import (
     "fmt"
-    "encoding/json"
-    "os"
+    //"encoding/json"
+    "math/rand"
+    "time"
 )
-//使用度分秒格式的坐标表示半球
-type coordinate struct{
-    d,m,s float64
-    h rune
+type HoneyBee struct{
+    Name string 
 }
-
-func (c coordinate) String() string{
-    return fmt.Sprintf("%v~%v'%.1f\" %c",c.d,c.m,c.s,c.h)
+func (hb HoneyBee)String()string{
+    return fmt.Sprintf("this is a %v",hb.Name)
 }
-//坐标转换为十进制度格式
-func (c coordinate) decimal() float64{
-    sign:=1.0
-    switch c.h{
-        case 'S','W','s','w':
-        sign=-1
+func(hb HoneyBee)Move() string{
+    switch rand.Intn(3){
+        case 0:
+            return "buzzes about"
+        default:
+            return "files to infinity and beyond"
     }
-    return sign*(c.d+c.m/60+c.s/3600)
+}
+func(hb HoneyBee)Eat()string{
+    switch rand.Intn(2){
+        case 0:
+            return "pollen"
+        default:
+            return "nectar"    
+    }
 }
 
-func(c coordinate) MarshalJSON() ([]byte,error){
-    return json.Marshal(struct{
-        DD float64 `json:"decimal"`
-        DMS string `json:"dms"`
-        D float64 `json:"degrees"`
-        M float64 `json:"minutes"`
-        S float64 `json"seconds"`
-        H string `json:"hemisphere"`
-    }{
-        DD: c.decimal(),
-        DMS: c.String(),
-        D: c.d,
-        M: c.m,
-        S: c.s,
-        H: string(c.h),
-    })
+
+type Gopher struct{
+    Name string 
+}
+func (g Gopher)String()string{
+    return fmt.Sprintf("this is a %v",g.Name)
 }
 
-type location struct{
-    Name string `json:"name"`
-    Lat coordinate `json:"latitude"`
-    Long coordinate `json:"longitude"`
+func (g Gopher)Move() string{
+    switch rand.Intn(2){
+        case 0:
+            return "scurries along the ground"
+        default:
+            return "burrows in the sand"    
+    }
 }
+
+func(g Gopher) Eat() string{
+    switch rand.Intn(5){
+        case 0:
+            return "carrot"
+        case 1:
+            return "lettuce"
+        case 2:
+            return "radish"
+        case 3:
+            return "corn"
+        case 4:
+            return "root"
+        default:
+            return ""                
+    }
+}
+
+type animal interface{
+    Move() string
+    Eat() string
+}
+
+func step(a animal){
+    switch rand.Intn(2){
+        case 0:
+            fmt.Printf("%v %v.\n",a,a.Move())
+        case 1:
+            fmt.Printf("%v eats %v.\n",a,a.Eat())    
+    }
+}
+
+const sunrise,sunset = 8,18
 
 func main(){
-    elysium:=location{
-        Name:"Elysium Planitia",
-        Lat: coordinate{4,30,0.0,'N'},
-        Long: coordinate{135,54,0.0,'E'},
+    rand.Seed(time.Now().UnixNano())
+
+    animals:=[]animal{
+        HoneyBee{Name:"New Bee"},
+        Gopher{Name:"Go gopher"},
     }
-    bytes,err:= json.MarshalIndent(elysium,""," ")
-    if err!=nil{
-        fmt.Println(err)
-        os.Exit(1)
+
+    var sol,hour int
+    loop:
+    for{
+        fmt.Printf("%2d:00 ",hour)
+        if hour<sunrise||hour>sunset{
+            fmt.Println("the animals are sleeping.")
+        }else{
+            step(animals[rand.Intn(len(animals))])
+        }
+        time.Sleep(500*time.Millisecond)
+        hour++
+        if hour>=24{
+            hour=0
+            sol++
+            if sol>=3{
+                break loop
+            }
+        }
     }
-    fmt.Println(string(bytes))
-    //fmt.Println("=====================================")
-    //bytes,err=elysium.Lat.MarshalJSON()
-    //fmt.Println(string(bytes))
-    //fmt.Println("=====================================")
-    //bytes,err=elysium.Long.MarshalJSON()
-    //fmt.Println(string(bytes))
 }
