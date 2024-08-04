@@ -1,23 +1,31 @@
 package main
 
 import "fmt"
-import "net/url"
-import "os"
-
 func main(){
-
-
-u,err:=url.Parse("https://a b.com")
-if err!=nil{
-	fmt.Println(err)
-	fmt.Printf("%#v\n",err)
-
-	if e,ok:=err.(*url.Error); ok{
-		fmt.Println("op:",e.Op)
-		fmt.Println("URL:",e.URL)
-		fmt.Println("Err:",e.Err)
-	}
-	os.Exit(1)
+	c0:=make(chan string)
+	c1:=make(chan string)
+	go sourceGopher(c0)
+	go removeDuplicates(c0,c1)
+	printGopher(c1)
 }
-fmt.Println(u)
+func sourceGopher(downstream chan string){
+	for _,v:=range []string{"a","b","b","c","d","d","d","e"}{
+		downstream<-v
+	}
+	close(downstream)
+}
+func removeDuplicates(upstream,downstream chan string){
+	prev:=""
+	for v:=range upstream{
+		if v!=prev{
+			downstream<-v
+			prev = v
+		}
+	}
+	close(downstream)
+}
+func printGopher(upstream chan string){
+	for v:=range upstream{
+		fmt.Println(v)
+	}
 }
