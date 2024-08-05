@@ -16,7 +16,7 @@ func main() {
 	grid := NewMarsGrid(gridSize)
 	rover := make([]*RoverDriver, 5)
 	for i := range rover {
-		rover[i] = startDriver(fmt.Sprintf("rover", i), grid, marsToEarth)
+		rover[i] = startDriver(fmt.Sprint("rover", i), grid, marsToEarth)
 	}
 	time.Sleep(60 * time.Second)
 }
@@ -139,7 +139,7 @@ func (r *RoverDriver) drive() {
 			nextMove = time.After(updateInterval)
 			newPos := r.occupier.Pos().Add(direction)
 			if r.occupier.MoveTo(newPos) {
-				log.Printf("%s moved to %v", r.name, newPos)
+				log.Printf("%v moved to %v", r.name, newPos)
 				r.checkForLife()
 				break
 			}
