@@ -18,6 +18,10 @@ func main() {
 	for i := range rover {
 		rover[i] = startDriver(fmt.Sprint("rover", i), grid, marsToEarth)
 	}
+	for i := range rover {
+
+		rover[i].Right()
+	}
 	time.Sleep(60 * time.Second)
 }
 
@@ -29,7 +33,7 @@ type Message struct {
 
 const (
 	dayLength         = 24 * time.Second
-	receiveTimePerDay = 2 * time.Second
+	receiveTimePerDay = 5 * time.Second
 )
 
 func erathReceiver(msgc chan []Message) {
@@ -82,12 +86,14 @@ func (r *Radio) run(toEarth chan []Message) {
 	for {
 		toEarth1 := toEarth
 		if len(buffered) == 0 {
-			toEarth = nil
+			toEarth1 = nil
 		}
 		select {
 		case m := <-r.fromRover:
 			buffered = append(buffered, m)
+			//fmt.Printf("appended buffered:%v\n",len(buffered))
 		case toEarth1 <- buffered:
+			//fmt.Printf("appended buffered:%v\n",len(buffered))
 			buffered = nil
 		}
 	}
@@ -157,10 +163,12 @@ func (r *RoverDriver) drive() {
 	}
 }
 func (r *RoverDriver) checkForLife() {
+	//fmt.Println("checking for life")
 	sensorData := r.occupier.Sense()
 	if sensorData.LifeSigns < 900 {
 		return
 	}
+	fmt.Println("checking for life")
 	r.radio.SendToEarth(Message{
 		Pos:       r.occupier.Pos(),
 		LifeSigns: sensorData.LifeSigns,
